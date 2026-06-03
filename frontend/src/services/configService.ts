@@ -53,14 +53,14 @@ export const configService = {
    */
   async getUIConfig(): Promise<UIConfig> {
     const enableMock = import.meta.env.VITE_ENABLE_MOCK_API === 'true'
-    
+
     // Return mock data if mock API is enabled
     if (enableMock) {
       return new Promise((resolve) => {
         setTimeout(() => resolve(mockUIConfig), 100)
       })
     }
-    
+
     try {
       const response = await api.get('/config/ui')
       return response.data
@@ -77,20 +77,23 @@ export const configService = {
    */
   async getPageConfig(pageId: string): Promise<Record<string, unknown>> {
     const enableMock = import.meta.env.VITE_ENABLE_MOCK_API === 'true'
-    
+
     // Return mock data if mock API is enabled
     if (enableMock) {
       return new Promise((resolve) => {
         setTimeout(() => resolve({ pageId, title: `Page ${pageId}` }), 100)
       })
     }
-    
+
     try {
       const response = await api.get(`/config/pages/${pageId}`)
       return response.data
     } catch (error) {
       // If backend is unavailable, return empty config
-      console.warn(`Backend unavailable for page ${pageId}, using empty config:`, error)
+      console.warn(
+        `Backend unavailable for page ${pageId}, using empty config:`,
+        error
+      )
       return { pageId, title: `Page ${pageId}` }
     }
   },

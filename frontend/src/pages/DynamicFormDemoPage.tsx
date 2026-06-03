@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { ApiFormRenderer } from '../forms/ApiFormRenderer';
-import { FormConfig } from '../../types/api';
+import React, { useState } from 'react'
+import { ApiFormRenderer } from '@/components/forms/ApiFormRenderer'
+import { FormConfig } from '@/types/api'
 
 // Example: User Registration Form Config (could come from API)
 const userRegistrationFormConfig: FormConfig = {
@@ -101,7 +101,10 @@ const userRegistrationFormConfig: FormConfig = {
           label: 'Mật khẩu',
           required: true,
           grid: { colspan: 1 },
-          validation: { minLength: 8, pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)' },
+          validation: {
+            minLength: 8,
+            pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)',
+          },
           helpText: 'Ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số',
         },
         {
@@ -176,8 +179,10 @@ const userRegistrationFormConfig: FormConfig = {
           name: 'experience',
           label: 'Số năm kinh nghiệm',
           grid: { colspan: 1 },
-          min: 0,
-          max: 50,
+          validation: {
+            min: 0,
+            max: 50,
+          },
         },
         // Conditional field example
         {
@@ -204,37 +209,40 @@ const userRegistrationFormConfig: FormConfig = {
     text: 'Làm lại',
     show: true,
   },
-};
+}
 
 export const DynamicFormDemoPage: React.FC = () => {
-  const [submissionResult, setSubmissionResult] = useState<any>(null);
+  const [submissionResult, setSubmissionResult] = useState<any>(null)
 
   const handleSubmit = async (data: Record<string, any>) => {
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
     // Simulate validation error for demo
     if (data.password !== data.confirmPassword) {
       return {
         success: false,
         message: 'Mật khẩu xác nhận không khớp',
         errors: { confirmPassword: 'Mật khẩu xác nhận không khớp' },
-      };
+      }
     }
 
-    console.log('Form submitted:', data);
-    setSubmissionResult({ success: true, data });
-    return { success: true, message: 'Đăng ký thành công!', data };
-  };
+    console.log('Form submitted:', data)
+    setSubmissionResult({ success: true, data })
+    return { success: true, message: 'Đăng ký thành công!', data }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">Dynamic Form Builder</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Dynamic Form Builder
+          </h1>
           <p className="mt-2 text-gray-600">
-            Render form từ cấu hình API - Hỗ trợ đầy đủ các loại trường, validation và conditional logic
+            Render form từ cấu hình API - Hỗ trợ đầy đủ các loại trường,
+            validation và conditional logic
           </p>
         </div>
       </header>
@@ -249,20 +257,26 @@ export const DynamicFormDemoPage: React.FC = () => {
 
         {/* Submission Result */}
         {submissionResult && (
-          <div className={`mt-8 p-6 rounded-xl border ${
-            submissionResult.success 
-              ? 'bg-green-50 border-green-200' 
-              : 'bg-red-50 border-red-200'
-          }`}>
-            <h3 className={`text-lg font-semibold ${
-              submissionResult.success ? 'text-green-800' : 'text-red-800'
-            }`}>
+          <div
+            className={`mt-8 p-6 rounded-xl border ${
+              submissionResult.success
+                ? 'bg-green-50 border-green-200'
+                : 'bg-red-50 border-red-200'
+            }`}
+          >
+            <h3
+              className={`text-lg font-semibold ${
+                submissionResult.success ? 'text-green-800' : 'text-red-800'
+              }`}
+            >
               {submissionResult.success ? '✓ Thành công' : '✗ Lỗi'}
             </h3>
             {submissionResult.message && (
-              <p className={`mt-2 ${
-                submissionResult.success ? 'text-green-700' : 'text-red-700'
-              }`}>
+              <p
+                className={`mt-2 ${
+                  submissionResult.success ? 'text-green-700' : 'text-red-700'
+                }`}
+              >
                 {submissionResult.message}
               </p>
             )}
@@ -283,21 +297,50 @@ export const DynamicFormDemoPage: React.FC = () => {
         {/* Features List */}
         <div className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { icon: '🎨', title: 'Dynamic Rendering', desc: 'Render form từ JSON config API' },
-            { icon: '✅', title: 'Validation', desc: 'Built-in validation với custom rules' },
-            { icon: '🔀', title: 'Conditional Logic', desc: 'Hiện/ẩn field dựa trên giá trị' },
-            { icon: '📱', title: 'Responsive', desc: 'Grid layout responsive mọi thiết bị' },
-            { icon: '🎭', title: 'Multiple Types', desc: '15+ loại field khác nhau' },
-            { icon: '⚡', title: 'Real-time', desc: 'Update UI ngay khi có dữ liệu' },
+            {
+              icon: '🎨',
+              title: 'Dynamic Rendering',
+              desc: 'Render form từ JSON config API',
+            },
+            {
+              icon: '✅',
+              title: 'Validation',
+              desc: 'Built-in validation với custom rules',
+            },
+            {
+              icon: '🔀',
+              title: 'Conditional Logic',
+              desc: 'Hiện/ẩn field dựa trên giá trị',
+            },
+            {
+              icon: '📱',
+              title: 'Responsive',
+              desc: 'Grid layout responsive mọi thiết bị',
+            },
+            {
+              icon: '🎭',
+              title: 'Multiple Types',
+              desc: '15+ loại field khác nhau',
+            },
+            {
+              icon: '⚡',
+              title: 'Real-time',
+              desc: 'Update UI ngay khi có dữ liệu',
+            },
           ].map((feature, i) => (
-            <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+            <div
+              key={i}
+              className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow"
+            >
               <span className="text-3xl">{feature.icon}</span>
-              <h3 className="mt-4 font-semibold text-gray-900">{feature.title}</h3>
+              <h3 className="mt-4 font-semibold text-gray-900">
+                {feature.title}
+              </h3>
               <p className="mt-2 text-sm text-gray-600">{feature.desc}</p>
             </div>
           ))}
         </div>
       </main>
     </div>
-  );
-};
+  )
+}

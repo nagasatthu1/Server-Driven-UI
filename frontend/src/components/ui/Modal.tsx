@@ -69,7 +69,9 @@ export function Modal({
           <div className="flex items-start justify-between gap-4 border-b p-6">
             <div className="space-y-1.5">
               {title && (
-                <h2 className="text-lg font-semibold leading-none tracking-tight">{title}</h2>
+                <h2 className="text-lg font-semibold leading-none tracking-tight">
+                  {title}
+                </h2>
               )}
               {description && (
                 <p className="text-sm text-muted-foreground">{description}</p>
@@ -85,7 +87,9 @@ export function Modal({
         )}
 
         {/* Body */}
-        <div className={cn('p-6', !title && !description && 'flex justify-end')}>
+        <div
+          className={cn('p-6', !title && !description && 'flex justify-end')}
+        >
           {children}
         </div>
 
@@ -106,7 +110,11 @@ interface ModalTriggerProps {
   asChild?: boolean
 }
 
-export function ModalTrigger({ children, trigger, asChild }: ModalTriggerProps) {
+export function ModalTrigger({
+  children,
+  trigger,
+  asChild,
+}: ModalTriggerProps) {
   // This is a simplified version - in a real app you'd use context
   return <>{trigger || children}</>
 }
@@ -115,15 +123,27 @@ export function ModalContent({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-export function ModalHeader({ title, description }: { title?: string; description?: string }) {
+export function ModalHeader({
+  title,
+  description,
+}: {
+  title?: string
+  description?: string
+}) {
   return (
     <div className="space-y-1.5">
       {title && <h2 className="text-lg font-semibold">{title}</h2>}
-      {description && <p className="text-sm text-muted-foreground">{description}</p>}
+      {description && (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      )}
     </div>
   )
 }
 
 export function ModalFooter({ children }: { children: ReactNode }) {
-  return <div className="flex items-center justify-end gap-2 border-t bg-muted/50 p-6">{children}</div>
+  return (
+    <div className="flex items-center justify-end gap-2 border-t bg-muted/50 p-6">
+      {children}
+    </div>
+  )
 }

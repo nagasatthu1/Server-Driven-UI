@@ -1,5 +1,10 @@
 import { useDndContext, type UniqueIdentifier } from '@dnd-kit/core'
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Eye, EyeOff, Trash2, Settings } from 'lucide-react'
 import type { WidgetConfig } from '@/types/layout'
@@ -12,7 +17,12 @@ interface WidgetItemProps {
   onEdit: (widget: WidgetConfig) => void
 }
 
-export function WidgetItem({ widget, onToggleVisibility, onRemove, onEdit }: WidgetItemProps) {
+export function WidgetItem({
+  widget,
+  onToggleVisibility,
+  onRemove,
+  onEdit,
+}: WidgetItemProps) {
   const {
     attributes,
     listeners,
@@ -116,7 +126,7 @@ export function WidgetList({
 
   // Handle drag end
   if (dndContext.active?.id) {
-    dndContext.over?.id && 
+    dndContext.over?.id &&
       onReorder(
         arrayMove(
           widgets.map((w) => w.id),
@@ -134,7 +144,9 @@ export function WidgetList({
       {/* Visible Widgets */}
       {visibleWidgets.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium mb-3 text-muted-foreground">Visible Widgets</h3>
+          <h3 className="text-sm font-medium mb-3 text-muted-foreground">
+            Visible Widgets
+          </h3>
           <SortableContext
             items={visibleWidgets.map((w) => w.id)}
             strategy={verticalListSortingStrategy}
@@ -155,7 +167,9 @@ export function WidgetList({
       {/* Hidden Widgets */}
       {hiddenWidgets.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium mb-3 text-muted-foreground">Hidden Widgets</h3>
+          <h3 className="text-sm font-medium mb-3 text-muted-foreground">
+            Hidden Widgets
+          </h3>
           <SortableContext
             items={hiddenWidgets.map((w) => w.id)}
             strategy={verticalListSortingStrategy}

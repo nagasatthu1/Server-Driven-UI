@@ -1,6 +1,14 @@
 export interface WidgetConfig {
   id: string
-  type: 'text' | 'image' | 'chart' | 'table' | 'form' | 'button' | 'card' | 'custom'
+  type:
+    | 'text'
+    | 'image'
+    | 'chart'
+    | 'table'
+    | 'form'
+    | 'button'
+    | 'card'
+    | 'custom'
   title: string
   visible: boolean
   position: number

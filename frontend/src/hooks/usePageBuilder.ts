@@ -34,22 +34,28 @@ export function usePageBuilder() {
       const newPages = prev.pages.filter((p) => p.id !== pageId)
       return {
         pages: newPages,
-        currentPageId: prev.currentPageId === pageId 
-          ? (newPages.length > 0 ? newPages[0].id : null)
-          : prev.currentPageId,
+        currentPageId:
+          prev.currentPageId === pageId
+            ? newPages.length > 0
+              ? newPages[0].id
+              : null
+            : prev.currentPageId,
       }
     })
   }, [])
 
   // Update page
-  const updatePage = useCallback((pageId: string, updates: Partial<PageConfig>) => {
-    setState((prev) => ({
-      ...prev,
-      pages: prev.pages.map((p) =>
-        p.id === pageId ? { ...p, ...updates } : p
-      ),
-    }))
-  }, [])
+  const updatePage = useCallback(
+    (pageId: string, updates: Partial<PageConfig>) => {
+      setState((prev) => ({
+        ...prev,
+        pages: prev.pages.map((p) =>
+          p.id === pageId ? { ...p, ...updates } : p
+        ),
+      }))
+    },
+    []
+  )
 
   // Set current page
   const setCurrentPage = useCallback((pageId: string | null) => {
@@ -57,21 +63,22 @@ export function usePageBuilder() {
   }, [])
 
   // Add widget to page
-  const addWidget = useCallback((pageId: string, widget: Omit<WidgetConfig, 'id'>) => {
-    const newWidget: WidgetConfig = {
-      ...widget,
-      id: uuidv4(),
-    }
-    setState((prev) => ({
-      ...prev,
-      pages: prev.pages.map((p) =>
-        p.id === pageId
-          ? { ...p, widgets: [...p.widgets, newWidget] }
-          : p
-      ),
-    }))
-    return newWidget
-  }, [])
+  const addWidget = useCallback(
+    (pageId: string, widget: Omit<WidgetConfig, 'id'>) => {
+      const newWidget: WidgetConfig = {
+        ...widget,
+        id: uuidv4(),
+      }
+      setState((prev) => ({
+        ...prev,
+        pages: prev.pages.map((p) =>
+          p.id === pageId ? { ...p, widgets: [...p.widgets, newWidget] } : p
+        ),
+      }))
+      return newWidget
+    },
+    []
+  )
 
   // Remove widget from page
   const removeWidget = useCallback((pageId: string, widgetId: string) => {
@@ -111,39 +118,43 @@ export function usePageBuilder() {
       ...prev,
       pages: prev.pages.map((p) => {
         if (p.id !== pageId) return p
-        
+
         // Create a map of widgets by ID for quick lookup
         const widgetMap = new Map(p.widgets.map((w) => [w.id, w]))
-        
+
         // Rebuild widgets array in the new order
         const reorderedWidgets = widgetIds
           .map((id) => widgetMap.get(id))
           .filter((w): w is WidgetConfig => w !== undefined)
-        
+
         return { ...p, widgets: reorderedWidgets }
       }),
     }))
   }, [])
 
   // Toggle widget visibility
-  const toggleWidgetVisibility = useCallback((pageId: string, widgetId: string) => {
-    setState((prev) => ({
-      ...prev,
-      pages: prev.pages.map((p) =>
-        p.id === pageId
-          ? {
-              ...p,
-              widgets: p.widgets.map((w) =>
-                w.id === widgetId ? { ...w, visible: !w.visible } : w
-              ),
-            }
-          : p
-      ),
-    }))
-  }, [])
+  const toggleWidgetVisibility = useCallback(
+    (pageId: string, widgetId: string) => {
+      setState((prev) => ({
+        ...prev,
+        pages: prev.pages.map((p) =>
+          p.id === pageId
+            ? {
+                ...p,
+                widgets: p.widgets.map((w) =>
+                  w.id === widgetId ? { ...w, visible: !w.visible } : w
+                ),
+              }
+            : p
+        ),
+      }))
+    },
+    []
+  )
 
   // Get current page
-  const currentPage = state.pages.find((p) => p.id === state.currentPageId) || null
+  const currentPage =
+    state.pages.find((p) => p.id === state.currentPageId) || null
 
   return {
     ...state,

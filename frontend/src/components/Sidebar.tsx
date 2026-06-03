@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { 
-  LayoutDashboard, 
-  Users, 
-  Settings, 
-  FileText, 
-  ChevronLeft, 
+import {
+  LayoutDashboard,
+  Users,
+  Settings,
+  FileText,
+  ChevronLeft,
   ChevronRight,
   LogOut,
   Bell,
@@ -15,7 +15,7 @@ import {
   ClipboardList,
   MessageSquare,
   HelpCircle,
-  FolderOpen
+  FolderOpen,
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -41,11 +41,11 @@ const bottomItems = [
   { icon: LogOut, label: 'Đăng xuất', path: '/logout' },
 ]
 
-export default function Sidebar({ 
-  collapsed = false, 
+export default function Sidebar({
+  collapsed = false,
   onToggle,
   activePath = '/',
-  onNavigate 
+  onNavigate,
 }: SidebarProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
@@ -63,7 +63,9 @@ export default function Sidebar({
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground font-bold">
               A
             </div>
-            <span className="text-lg font-semibold text-sidebar-foreground">Admin</span>
+            <span className="text-lg font-semibold text-sidebar-foreground">
+              Admin
+            </span>
           </div>
         )}
         <button
@@ -138,7 +140,9 @@ export default function Sidebar({
                 )}
               >
                 <item.icon className="h-5 w-5 flex-shrink-0" />
-                {!collapsed && <span className="flex-1 text-left">{item.label}</span>}
+                {!collapsed && (
+                  <span className="flex-1 text-left">{item.label}</span>
+                )}
               </button>
             </li>
           ))}
@@ -153,8 +157,12 @@ export default function Sidebar({
               AD
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="truncate text-sm font-medium text-sidebar-foreground">Admin User</p>
-              <p className="truncate text-xs text-sidebar-muted-foreground">admin@example.com</p>
+              <p className="truncate text-sm font-medium text-sidebar-foreground">
+                Admin User
+              </p>
+              <p className="truncate text-xs text-sidebar-muted-foreground">
+                admin@example.com
+              </p>
             </div>
             <button className="rounded-lg p-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
               <Bell size={18} />

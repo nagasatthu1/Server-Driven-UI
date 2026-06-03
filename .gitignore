@@ -66,3 +66,8 @@ htmlcov/
 *.lz
 *.lzo
 ```
+
+# Lock files
+bun.lock
+package-lock.json
+yarn.lock

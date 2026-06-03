@@ -151,7 +151,9 @@ export default function PageBuilder() {
               >
                 <div className="flex items-center justify-between">
                   <span className="truncate">{page.name}</span>
-                  {!page.enabled && <span className="text-xs opacity-60">(Hidden)</span>}
+                  {!page.enabled && (
+                    <span className="text-xs opacity-60">(Hidden)</span>
+                  )}
                 </div>
               </button>
             ))}
@@ -165,7 +167,9 @@ export default function PageBuilder() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h1 className="text-2xl font-bold">{currentPage.name}</h1>
-                <p className="text-sm text-muted-foreground">Path: {currentPage.path}</p>
+                <p className="text-sm text-muted-foreground">
+                  Path: {currentPage.path}
+                </p>
               </div>
 
               <div className="flex items-center gap-2">
@@ -211,9 +215,15 @@ export default function PageBuilder() {
             {/* Widget List with Drag & Drop */}
             <WidgetList
               widgets={currentPage.widgets}
-              onReorder={(widgetIds) => currentPageId && reorderWidgets(currentPageId, widgetIds)}
-              onToggleVisibility={(widgetId) => currentPageId && toggleWidgetVisibility(currentPageId, widgetId)}
-              onRemove={(widgetId) => currentPageId && removeWidget(currentPageId, widgetId)}
+              onReorder={(widgetIds) =>
+                currentPageId && reorderWidgets(currentPageId, widgetIds)
+              }
+              onToggleVisibility={(widgetId) =>
+                currentPageId && toggleWidgetVisibility(currentPageId, widgetId)
+              }
+              onRemove={(widgetId) =>
+                currentPageId && removeWidget(currentPageId, widgetId)
+              }
               onEdit={(widget) => setEditingWidget(widget)}
             />
           </div>
@@ -240,7 +250,9 @@ export default function PageBuilder() {
                   value={editingWidget.title}
                   onChange={(e) =>
                     currentPageId &&
-                    updateWidget(currentPageId, editingWidget.id, { title: e.target.value })
+                    updateWidget(currentPageId, editingWidget.id, {
+                      title: e.target.value,
+                    })
                   }
                   className="w-full px-3 py-2 border rounded-md"
                 />
@@ -270,7 +282,10 @@ export default function PageBuilder() {
 
               <div className="pt-4 border-t">
                 <button
-                  onClick={() => currentPageId && removeWidget(currentPageId, editingWidget.id)}
+                  onClick={() =>
+                    currentPageId &&
+                    removeWidget(currentPageId, editingWidget.id)
+                  }
                   className="w-full px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90"
                 >
                   Delete Widget
