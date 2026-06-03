@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { SidebarMenuItem } from '@/types/layout'
 
@@ -27,7 +26,9 @@ export default function Sidebar({
   const getIconComponent = (iconName?: string) => {
     if (!iconName) return null
     const IconComponent = iconMap[iconName]
-    return IconComponent ? <IconComponent className="h-5 w-5 flex-shrink-0" /> : null
+    return IconComponent ? (
+      <IconComponent className="h-5 w-5 flex-shrink-0" />
+    ) : null
   }
 
   return (
@@ -54,12 +55,32 @@ export default function Sidebar({
           className="flex h-8 w-8 items-center justify-center rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
         >
           {collapsed ? (
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           ) : (
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           )}
         </button>

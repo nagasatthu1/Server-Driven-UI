@@ -110,11 +110,7 @@ interface ModalTriggerProps {
   asChild?: boolean
 }
 
-export function ModalTrigger({
-  children,
-  trigger,
-  asChild,
-}: ModalTriggerProps) {
+export function ModalTrigger({ children, trigger }: ModalTriggerProps) {
   // This is a simplified version - in a real app you'd use context
   return <>{trigger || children}</>
 }

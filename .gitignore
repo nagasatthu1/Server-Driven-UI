@@ -16,14 +16,6 @@ build/
 # IDE specific
 .vscode/
 .idea/
-*.swp
-*.swo
-
-# Python artifacts (if any Python in project)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
 
 # Logs
 *.log
@@ -45,4 +37,10 @@ htmlcov/
 .npm/
 .yarn/
 .pnpm-store/
+
+# lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lock
 ```

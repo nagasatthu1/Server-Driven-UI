@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
 import { useSidebarMenu } from '@/hooks/useConfig'
+import { useNavigate } from 'react-router-dom'
 
 export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { data: menuItems, isLoading } = useSidebarMenu()
+  const navigate = useNavigate()
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -17,6 +19,7 @@ export default function DashboardPage() {
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
         activePath="/dashboard"
+        onNavigate={(p) => navigate(p)}
       />
       <main
         className={`transition-all duration-300 ${
@@ -33,12 +36,16 @@ export default function DashboardPage() {
             <div className="rounded-lg border bg-card p-6">
               <h3 className="text-lg font-semibold">Tổng người dùng</h3>
               <p className="text-3xl font-bold mt-2">1,234</p>
-              <p className="text-sm text-success mt-1">+12.5% so với tháng trước</p>
+              <p className="text-sm text-success mt-1">
+                +12.5% so với tháng trước
+              </p>
             </div>
             <div className="rounded-lg border bg-card p-6">
               <h3 className="text-lg font-semibold">Doanh thu</h3>
               <p className="text-3xl font-bold mt-2">$12,345</p>
-              <p className="text-sm text-success mt-1">+8.2% so với tháng trước</p>
+              <p className="text-sm text-success mt-1">
+                +8.2% so với tháng trước
+              </p>
             </div>
           </div>
         </div>
