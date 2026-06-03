@@ -1,0 +1,665 @@
+<!-- frontend/DynamicRenderer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic UI Renderer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .component-fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-gray-800">🎨 Dynamic UI Renderer</h1>
+      <div class="flex gap-2">
+        <select id="pageSelector" class="border rounded-lg px-4 py-2 bg-white">
+          <option value="">Select a page...</option>
+        </select>
+        <button onclick="loadCurrentPage()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          <i class="fas fa-sync-alt mr-2"></i>Reload
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="mainContent" class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Dynamic content will be rendered here -->
+    <div class="text-center text-gray-500 py-20">
+      <i class="fas fa-arrow-left text-4xl mb-4"></i>
+      <p class="text-lg">Select a page from the dropdown to render</p>
+    </div>
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 text-center">
+      <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+      <p class="text-gray-600">Loading...</p>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // Dynamic UI Renderer Engine
+    // ============================================
+    
+    const API_BASE_URL = 'http://localhost:3000/api';
+    let currentConfig = null;
+    let chartInstances = {};
+    let componentState = {};
+
+    // Component Registry - Map backend types to render functions
+    const ComponentRenderers = {
+      'row': renderRow,
+      'grid': renderGrid,
+      'toolbar': renderToolbar,
+      'stat-card': renderStatCard,
+      'chart': renderChart,
+      'data-table': renderDataTable,
+      'search-box': renderSearchBox,
+      'button': renderButton
+    };
+
+    // ============================================
+    // Initialization
+    // ============================================
+    
+    async function init() {
+      await loadPageList();
+    }
+
+    // Load available pages into selector
+    async function loadPageList() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/pages/list`);
+        const result = await response.json();
+        
+        if (result.success) {
+          const selector = document.getElementById('pageSelector');
+          result.data.forEach(page => {
+            const option = document.createElement('option');
+            option.value = page.pageId;
+            option.textContent = page.pageTitle;
+            selector.appendChild(option);
+          });
+
+          // Auto-load first page
+          if (result.data.length > 0) {
+            selector.value = result.data[0].pageId;
+            loadCurrentPage();
+          }
+        }
+      } catch (error) {
+        console.error('Error loading page list:', error);
+        showError('Failed to load pages. Make sure backend is running.');
+      }
+    }
+
+    // Load and render current selected page
+    async function loadCurrentPage() {
+      const pageId = document.getElementById('pageSelector').value;
+      if (!pageId) return;
+
+      showLoading(true);
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/pages/${pageId}/config`);
+        const result = await response.json();
+        
+        if (result.success) {
+          currentConfig = result.data;
+          renderPage(currentConfig);
+        } else {
+          showError(result.error || 'Failed to load page config');
+        }
+      } catch (error) {
+        console.error('Error loading page:', error);
+        showError('Failed to connect to backend server');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // ============================================
+    // Page Rendering
+    // ============================================
+    
+    function renderPage(config) {
+      const mainContent = document.getElementById('mainContent');
+      
+      // Update page title
+      document.title = config.pageTitle + ' - Dynamic UI';
+      
+      // Clear existing content
+      mainContent.innerHTML = '';
+      
+      // Destroy existing charts
+      Object.values(chartInstances).forEach(chart => chart.destroy());
+      chartInstances = {};
+      
+      // Create page container
+      const pageContainer = document.createElement('div');
+      pageContainer.className = 'component-fade-in';
+      
+      // Page header
+      const header = document.createElement('h2');
+      header.className = 'text-3xl font-bold text-gray-800 mb-8';
+      header.textContent = config.pageTitle;
+      pageContainer.appendChild(header);
+      
+      // Render sections
+      if (config.sections) {
+        config.sections.forEach(section => {
+          const sectionEl = renderSection(section);
+          if (sectionEl) {
+            pageContainer.appendChild(sectionEl);
+          }
+        });
+      }
+      
+      mainContent.appendChild(pageContainer);
+    }
+
+    function renderSection(section) {
+      const sectionContainer = document.createElement('div');
+      sectionContainer.id = section.id;
+      sectionContainer.className = 'mb-8';
+      
+      if (section.components) {
+        section.components.forEach(component => {
+          const renderer = ComponentRenderers[component.type];
+          if (renderer) {
+            const componentEl = renderer(component);
+            if (componentEl) {
+              sectionContainer.appendChild(componentEl);
+            }
+          } else {
+            console.warn(`No renderer for component type: ${component.type}`);
+          }
+        });
+      }
+      
+      return sectionContainer;
+    }
+
+    // ============================================
+    // Component Renderers
+    // ============================================
+    
+    function renderRow(component) {
+      const container = document.createElement('div');
+      container.className = 'flex flex-row gap-4 mb-4 flex-wrap';
+      
+      if (component.components) {
+        component.components.forEach(child => {
+          const renderer = ComponentRenderers[child.type];
+          if (renderer) {
+            container.appendChild(renderer(child));
+          }
+        });
+      }
+      
+      return container;
+    }
+
+    function renderGrid(component) {
+      const container = document.createElement('div');
+      container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4';
+      
+      if (component.components) {
+        component.components.forEach(child => {
+          const renderer = ComponentRenderers[child.type];
+          if (renderer) {
+            container.appendChild(renderer(child));
+          }
+        });
+      }
+      
+      return container;
+    }
+
+    function renderToolbar(component) {
+      const container = document.createElement('div');
+      container.className = 'flex items-center justify-between mb-6 flex-wrap gap-4';
+      
+      if (component.components) {
+        component.components.forEach(child => {
+          const renderer = ComponentRenderers[child.type];
+          if (renderer) {
+            container.appendChild(renderer(child));
+          }
+        });
+      }
+      
+      return container;
+    }
+
+    function renderStatCard(component) {
+      const container = document.createElement('div');
+      container.className = 'bg-white rounded-lg shadow p-6 flex-1 min-w-[200px] component-fade-in';
+      
+      const colorClasses = {
+        blue: 'text-blue-600',
+        green: 'text-green-600',
+        orange: 'text-orange-600',
+        red: 'text-red-600',
+        purple: 'text-purple-600'
+      };
+      
+      const iconClass = colorClasses[component.props.color] || 'text-gray-600';
+      
+      container.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-500 text-sm">${component.props.title}</p>
+            <p class="text-3xl font-bold text-gray-800 mt-2" data-bind="${component.props.value}">Loading...</p>
+          </div>
+          ${component.props.icon ? `<i class="fas fa-${component.props.icon} ${iconClass} text-4xl opacity-50"></i>` : ''}
+        </div>
+      `;
+      
+      // Fetch data if dataSource exists
+      if (component.dataSource) {
+        fetchDataForComponent(component, container);
+      }
+      
+      return container;
+    }
+
+    function renderChart(component) {
+      const container = document.createElement('div');
+      container.className = 'bg-white rounded-lg shadow p-6 mb-4 component-fade-in';
+      container.style.width = '100%';
+      
+      container.innerHTML = `
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">${component.props.title}</h3>
+        <canvas style="height: ${component.props.height || 300}px;"></canvas>
+      `;
+      
+      const canvas = container.querySelector('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Fetch chart data
+      if (component.dataSource) {
+        fetchDataForComponent(component, container, (data) => {
+          chartInstances[component.props.title] = new Chart(ctx, {
+            type: component.props.chartType || 'line',
+            data: data,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'top'
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: false
+                }
+              }
+            }
+          });
+        });
+      }
+      
+      return container;
+    }
+
+    function renderDataTable(component) {
+      const container = document.createElement('div');
+      container.className = 'bg-white rounded-lg shadow overflow-hidden component-fade-in';
+      container.style.width = '100%';
+      
+      const columns = component.props.columns || [];
+      const actions = component.props.actions || [];
+      
+      // Build table header
+      let headerHtml = '<thead class="bg-gray-50"><tr>';
+      columns.forEach(col => {
+        headerHtml += `<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${col.label}</th>`;
+      });
+      if (actions.length > 0) {
+        headerHtml += '<th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>';
+      }
+      headerHtml += '</tr></thead>';
+      
+      // Build table body placeholder
+      let bodyHtml = '<tbody id="table-body" class="bg-white divide-y divide-gray-200">';
+      bodyHtml += '<tr><td colspan="' + (columns.length + (actions.length > 0 ? 1 : 0)) + '" class="px-6 py-4 text-center text-gray-500">Loading...</td></tr>';
+      bodyHtml += '</tbody>';
+      
+      container.innerHTML = `
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            ${headerHtml}
+            ${bodyHtml}
+          </table>
+        </div>
+        ${component.props.pagination ? `
+          <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <span class="text-sm text-gray-500">Showing <span id="page-info">0-0 of 0</span></span>
+            <div class="flex gap-2">
+              <button id="prev-page" class="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50" disabled>Previous</button>
+              <button id="next-page" class="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50" disabled>Next</button>
+            </div>
+          </div>
+        ` : ''}
+      `;
+      
+      // Store table state
+      const tableState = {
+        currentPage: 1,
+        pageSize: component.props.pagination?.pageSize || 10,
+        searchTerm: '',
+        columns: columns,
+        actions: actions
+      };
+      componentState[component.props.title || 'table'] = tableState;
+      
+      // Fetch initial data
+      if (component.dataSource) {
+        fetchDataForTable(component, container, tableState);
+      }
+      
+      return container;
+    }
+
+    function renderSearchBox(component) {
+      const container = document.createElement('div');
+      container.className = 'relative';
+      
+      container.innerHTML = `
+        <input 
+          type="text" 
+          placeholder="${component.props.placeholder || 'Search...'}"
+          class="border rounded-lg px-4 py-2 w-64 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          data-debounce="${component.props.debounce || 300}"
+        />
+        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+      `;
+      
+      const input = container.querySelector('input');
+      let debounceTimer;
+      
+      input.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        const delay = parseInt(input.dataset.debounce);
+        debounceTimer = setTimeout(() => {
+          // Trigger filter action
+          if (component.action && component.action.target) {
+            filterTable(component.action.target, e.target.value);
+          }
+        }, delay);
+      });
+      
+      return container;
+    }
+
+    function renderButton(component) {
+      const button = document.createElement('button');
+      
+      const variantClasses = {
+        primary: 'bg-blue-600 text-white hover:bg-blue-700',
+        secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+        danger: 'bg-red-600 text-white hover:bg-red-700',
+        ghost: 'bg-transparent text-gray-600 hover:bg-gray-100'
+      };
+      
+      button.className = `${variantClasses[component.props.variant || 'primary']} px-4 py-2 rounded-lg font-medium transition-colors component-fade-in`;
+      
+      if (component.props.icon) {
+        button.innerHTML = `<i class="fas fa-${component.props.icon} mr-2"></i>${component.props.label}`;
+      } else {
+        button.textContent = component.props.label;
+      }
+      
+      // Handle click action
+      if (component.action) {
+        button.addEventListener('click', () => handleAction(component.action));
+      }
+      
+      return button;
+    }
+
+    // ============================================
+    // Data Fetching & Binding
+    // ============================================
+    
+    async function fetchDataForComponent(component, container, callback) {
+      try {
+        const endpoint = component.dataSource.endpoint;
+        const response = await fetch(`${API_BASE_URL}${endpoint}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Bind data to template placeholders
+          bindDataToElement(container, result.data);
+          
+          if (callback) {
+            callback(result.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    function bindDataToElement(container, data) {
+      // Replace {{key}} placeholders with actual data values
+      const elements = container.querySelectorAll('[data-bind]');
+      elements.forEach(el => {
+        const binding = el.dataset.bind.replace(/[{}]/g, '');
+        if (data[binding] !== undefined) {
+          el.textContent = data[binding];
+        }
+      });
+    }
+
+    async function fetchDataForTable(component, container, state) {
+      try {
+        const { endpoint, params } = component.dataSource;
+        
+        // Build query params
+        const queryParams = new URLSearchParams();
+        if (params) {
+          Object.keys(params).forEach(key => {
+            const paramValue = params[key];
+            if (paramValue.startsWith('{{') && paramValue.endsWith('}}')) {
+              const stateKey = paramValue.replace(/[{}]/g, '');
+              queryParams.append(key, state[stateKey] || '');
+            } else {
+              queryParams.append(key, paramValue);
+            }
+          });
+        }
+        
+        const url = `${API_BASE_URL}${endpoint}?${queryParams.toString()}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        if (result.success) {
+          renderTableData(container, result.data, state);
+        }
+      } catch (error) {
+        console.error('Error fetching table data:', error);
+        container.querySelector('#table-body').innerHTML = `
+          <tr><td colspan="100%" class="px-6 py-4 text-center text-red-500">Error loading data</td></tr>
+        `;
+      }
+    }
+
+    function renderTableData(container, data, state) {
+      const tbody = container.querySelector('#table-body');
+      const users = data.users || [];
+      const pagination = data.pagination;
+      
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="100%" class="px-6 py-4 text-center text-gray-500">No data found</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      users.forEach(row => {
+        html += '<tr class="hover:bg-gray-50">';
+        state.columns.forEach(col => {
+          let cellValue = row[col.key];
+          
+          // Custom rendering
+          if (col.render === 'badge') {
+            const badgeColors = {
+              active: 'bg-green-100 text-green-800',
+              inactive: 'bg-gray-100 text-gray-800',
+              pending: 'bg-yellow-100 text-yellow-800'
+            };
+            cellValue = `<span class="px-2 py-1 rounded-full text-xs font-medium ${badgeColors[cellValue] || 'bg-gray-100'}">${cellValue}</span>`;
+          }
+          
+          html += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${cellValue}</td>`;
+        });
+        
+        // Action buttons
+        if (state.actions.length > 0) {
+          html += '<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">';
+          state.actions.forEach(action => {
+            const actionColors = {
+              edit: 'text-blue-600 hover:text-blue-900',
+              delete: 'text-red-600 hover:text-red-900'
+            };
+            html += `<button class="${actionColors[action.type]} mr-3"><i class="fas fa-${action.icon}"></i></button>`;
+          });
+          html += '</td>';
+        }
+        
+        html += '</tr>';
+      });
+      
+      tbody.innerHTML = html;
+      
+      // Update pagination info
+      if (pagination) {
+        const start = (pagination.currentPage - 1) * pagination.pageSize + 1;
+        const end = Math.min(pagination.currentPage * pagination.pageSize, pagination.totalItems);
+        container.querySelector('#page-info').textContent = `${start}-${end} of ${pagination.totalItems}`;
+        
+        container.querySelector('#prev-page').disabled = pagination.currentPage === 1;
+        container.querySelector('#next-page').disabled = pagination.currentPage >= pagination.totalPages;
+        
+        // Add pagination event listeners
+        container.querySelector('#prev-page').onclick = () => changePage(state, state.currentPage - 1, container);
+        container.querySelector('#next-page').onclick = () => changePage(state, state.currentPage + 1, container);
+      }
+    }
+
+    function changePage(state, newPage, container) {
+      state.currentPage = newPage;
+      // Re-fetch data with new page
+      const tableComponent = findTableComponentByState(state);
+      if (tableComponent) {
+        fetchDataForTable(tableComponent, container, state);
+      }
+    }
+
+    function filterTable(targetTableId, searchTerm) {
+      // Find the table component and update its search term
+      const stateKey = Object.keys(componentState).find(key => 
+        componentState[key].id === targetTableId || key.includes(targetTableId)
+      );
+      
+      if (stateKey) {
+        componentState[stateKey].searchTerm = searchTerm;
+        componentState[stateKey].currentPage = 1; // Reset to first page
+        
+        // Re-render table
+        const tableContainer = document.getElementById(targetTableId)?.closest('.component-fade-in');
+        if (tableContainer) {
+          // Find corresponding component config and re-fetch
+          // This is simplified - in production you'd store component refs better
+        }
+      }
+    }
+
+    function findTableComponentByState(state) {
+      // Helper to find component config from state
+      // Simplified implementation
+      return currentConfig?.sections?.flatMap(s => s.components || [])
+        .find(c => c.props?.title === Object.keys(componentState).find(k => componentState[k] === state));
+    }
+
+    // ============================================
+    // Action Handlers
+    // ============================================
+    
+    function handleAction(action) {
+      switch (action.type) {
+        case 'modal':
+          openModal(action.modalId);
+          break;
+        case 'filter':
+          // Handled in search-box
+          break;
+        case 'navigate':
+          window.location.href = action.url;
+          break;
+        default:
+          console.log('Action:', action);
+      }
+    }
+
+    function openModal(modalId) {
+      alert(`Opening modal: ${modalId}\n(This is a demo - implement modal logic as needed)`);
+    }
+
+    // ============================================
+    // UI Helpers
+    // ============================================
+    
+    function showLoading(show) {
+      const overlay = document.getElementById('loadingOverlay');
+      overlay.style.display = show ? 'flex' : 'none';
+    }
+
+    function showError(message) {
+      const mainContent = document.getElementById('mainContent');
+      mainContent.innerHTML = `
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <i class="fas fa-exclamation-circle text-red-500 text-4xl mb-4"></i>
+          <p class="text-red-700">${message}</p>
+          <button onclick="loadCurrentPage()" class="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+            Try Again
+          </button>
+        </div>
+      `;
+    }
+
+    // ============================================
+    // Start Application
+    // ============================================
+    
+    init();
+  </script>
+</body>
+</html>
