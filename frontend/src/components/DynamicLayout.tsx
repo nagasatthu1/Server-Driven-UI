@@ -1,50 +1,62 @@
-import { ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import Sidebar from '@/components/Sidebar'
 import type { UIConfig } from '@/services/configService'
+import type { SidebarMenuItem } from '@/types/layout'
+import { useSidebarConfig } from '@/hooks/useConfig'
 
 interface DynamicLayoutProps {
   config: UIConfig
+  sidebarItems?: SidebarMenuItem[]
   children: ReactNode
 }
 
 export default function DynamicLayout({
   config,
+  sidebarItems = [],
   children,
 }: DynamicLayoutProps) {
-  const { theme, branding, navigation } = config
+  const { theme, branding } = config
+  const location = useLocation()
+  
+  // Use hook to get sidebar config for current page (if using React Query)
+  const { data: sidebarConfig, isLoading } = useSidebarConfig(location.pathname)
+  
+  const items = sidebarConfig?.sidebarItems || sidebarItems
+  const collapsed = sidebarConfig?.collapsed || false
+  const enabled = sidebarConfig?.enabled !== false
+  
+  const [isCollapsed, setIsCollapsed] = useState(collapsed)
+
+  if (isLoading) {
+    return <div>Loading layout...</div>
+  }
 
   return (
     <div className={cn('min-h-screen bg-background', theme.darkMode && 'dark')}>
-      {/* Header */}
-      <header className="border-b">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            {branding.logoUrl && (
-              <img
-                src={branding.logoUrl}
-                alt={branding.appName}
-                className="h-8 w-auto"
-              />
-            )}
-            <span className="text-xl font-bold">{branding.appName}</span>
-          </div>
-          {/* Navigation */}
-          <nav className="flex items-center gap-4">
-            {navigation.items.map((item, index) => (
-              <a
-                key={index}
-                href={item.path}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container py-6">{children}</main>
+      {/* Sidebar - mặc định là sidebar dọc */}
+      {enabled && (
+        <Sidebar
+          items={items}
+          collapsed={isCollapsed}
+          onToggle={() => setIsCollapsed(!isCollapsed)}
+          activePath={location.pathname}
+          onNavigate={(path) => {
+            window.location.href = path
+          }}
+        />
+      )}
+      
+      {/* Main Content - có margin-left để tránh sidebar */}
+      <main 
+        className={cn(
+          'transition-all duration-300 ease-in-out py-6',
+          enabled ? (isCollapsed ? 'ml-sidebar-collapsed' : 'ml-sidebar') : ''
+        )}
+      >
+        <div className="container">{children}</div>
+      </main>
 
       {/* Footer */}
       <footer className="border-t py-6">

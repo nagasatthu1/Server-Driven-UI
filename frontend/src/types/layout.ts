@@ -1,3 +1,19 @@
+export interface SidebarMenuItem {
+  icon?: string
+  label: string
+  path: string
+  badge?: number
+  children?: SidebarMenuItem[]
+}
+
+export interface PageSidebarConfig {
+  pageId: string
+  path: string
+  sidebarItems: SidebarMenuItem[]
+  collapsed?: boolean
+  enabled?: boolean
+}
+
 export interface WidgetConfig {
   id: string
   type:

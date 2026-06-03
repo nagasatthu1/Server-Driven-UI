@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { configService, type UIConfig } from '@/services/configService'
-import type { LayoutConfig } from '@/types/layout'
+import type { LayoutConfig, PageSidebarConfig, SidebarMenuItem } from '@/types/layout'
 
 export function useUIConfig() {
   return useQuery<UIConfig>({
@@ -30,6 +30,33 @@ export function useLayoutConfig() {
       return response as LayoutConfig
     },
     staleTime: 5 * 60 * 1000,
+  })
+}
+
+/**
+ * Hook để lấy cấu hình sidebar cho trang hiện tại
+ * @param currentPagePath - Path của trang hiện tại
+ */
+export function useSidebarConfig(currentPagePath: string) {
+  return useQuery<PageSidebarConfig>({
+    queryKey: ['sidebar-config', currentPagePath],
+    queryFn: async () => {
+      const response = await configService.getSidebarConfig(currentPagePath)
+      return response as PageSidebarConfig
+    },
+    enabled: !!currentPagePath,
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+/**
+ * Hook để lấy danh sách menu sidebar từ API
+ */
+export function useSidebarMenu() {
+  return useQuery<SidebarMenuItem[]>({
+    queryKey: ['sidebar-menu'],
+    queryFn: () => configService.getSidebarMenu(),
+    staleTime: 10 * 60 * 1000, // 10 minutes
   })
 }
 

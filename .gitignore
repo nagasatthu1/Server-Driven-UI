@@ -1,73 +1,1042 @@
-```
 # Dependencies
 node_modules/
 
 # Build outputs
 dist/
 build/
-target/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-.ENV
-.python-version
-.pytest_cache/
-.mypy_cache/
-.coverage
-
-# Logs
-*.log
+*.js.map
+*.ts.map
 
 # Environment variables
 .env
 .env.local
-.env.*
+*.env.*
 
-# IDE
+# IDE specific
 .vscode/
 .idea/
 *.swp
 *.swo
-*.tmp
 
-# OS
-.DS_Store
-Thumbs.db
+# Python artifacts (if any Python files exist in project)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
 
 # Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-```
+# Temporary files
+*.tmp
+*.temp
 
-# Lock files
-bun.lock
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Package managers
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+.mypy_cache/
+.pytest_cache/
+.jest/
+.nyc_output/
+
+# Distribution / packaging
+*.tar.gz
+*.whl
+
+# Local configuration
+config.local.*
+
+# Compiled JavaScript/TypeScript
+lib/
+out/
+dist/
+
+# Lock files for other package managers
+Gemfile.lock
+composer.lock
+
+# Mobile development
+*.ipa
+*.apk
+*.aab
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets
+secrets.*
+credentials.json
+*.key
+*.pem
+
+# Documentation builds
+_site/
+_sass-cache/
+.jekyll-cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Go
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+bin/
+vendor/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+target/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# C/C++
+*.o
+*.a
+*.obj
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Rust
+Cargo.lock
+target/
+
+# .NET
+bin/
+obj/
+*.sln
+*.csproj.user
+*.userprefs
+
+# Elixir
+_mix/
+deps/
+*.ez
+.erlang.cookie
+
+# Haskell
+dist-newstyle/
+.cabal-sandbox/
+*.o
+*.hi
+.stack-work/
+
+# Julia
+.julia/
+*.ji
+*.jl.cov
+*.jl.mem
+
+# Dart
+.dart_tool/
+*.dart.js
+*.dart.js.deps
+*.dart.js.map
+*.info.json
+
+# Elm
+elm-stuff/
+*.elmo
+
+# PureScript
+.output/
+psc-package.dhall
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Scala
+.classpath
+.project
+.settings/
+target/
+
+# Swift
+*.xcodeproj/
+*.xcworkspace/
+*.swiftpm/
+
+# Web
+public/dist/
+public/build/
+
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Logs/
+*.pidb
+*.userprefs
+*.unityproj
+*.meta
+
+# Unreal Engine
+Binaries/
+Intermediate/
+Saved/
+*.uproject
+*.uplugin
+
+# Cocos Creator
+library/
+temp/
+build/
+local/
+settings.json
+
+# Electron
+releases/
+*.AppImage
+
+# Firebase
+.firebase/
+
+# Heroku
+.heroku/
+
+# Netlify
+.netlify/
+
+# Vercel
+.vercel/
+
+# Docker
+.docker/
+
+# Kubernetes
+.kube/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfvars
+
+# Ansible
+.retry/
+
+# Puppet
+.gitlab/
+
+# Chef
+.kitchen/
+
+# SaltStack
+.salt/
+
+# Jenkins
+.jenkins/
+
+# Travis CI
+.travis.yml
+
+# CircleCI
+.circleci/
+
+# GitHub Actions
+.github/
+
+# GitLab CI
+.gitlab-ci.yml
+
+# Bitbucket Pipelines
+bitbucket-pipelines.yml
+
+# AWS
+.aws/
+
+# Azure
+.azure/
+
+# Google Cloud
+.gcloud/
+
+# Firebase
+.firebase/
+
+# Expo
+.expo/
+
+# React Native
+.rncache/
+ReactAndroid/
+ReactCommon/
+
+# Ionic
+ionic.config.json
+
+# Cordova
+platforms/
+plugins/
+config.xml
+
+# PhoneGap
+.phonegap/
+
+# Capacitor
+capacitor.config.json
+ios/
+android/
+
+# Flutter
+.dart_tool/
+.dart
+.pub
+build/
+.flutter-plugins
+.flutter-plugin-dependencies
+.packages
+
+# NativeScript
+hooks/
+node_modules/
+platforms/
+*.ipa
+*.apk
+*.aab
+
+# Quasar
+.quasar/
+
+# Nuxt
+.nuxt/
+dist/
+
+# Next
+.next/
+out/
+
+# Gatsby
+.cache/
+public/
+
+# VuePress
+.vuepress/dist
+
+# Gridsome
+.gridsome/
+
+# Docusaurus
+.docusaurus/
+website/build/
+
+# Hugo
+public/
+resources/_gen/
+
+# Jekyll
+_site/
+.jekyll-metadata
+.jekyll-cache
+
+# Middleman
+/.middleman/
+
+# Nanoc
+/output/
+/.nanoc/
+
+# Roots
+.roots/
+
+# Metalsmith
+.metalsmith/
+
+# Wintersmith
+.wintersmith/
+
+# DocPad
+.docpad-cache/
+docpad.log
+
+# Harp
+.harp/
+
+# Hologram
+.hologram_temp/
+
+# Hyde
+.hyde/
+
+# JBake
+output/
+cache/
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-metadata
+.jekyll-cache/
+
+# Middleman
+/.middleman/
+
+# MkDocs
+/site/
+
+# Nanoc
+/output/
+/.nanoc/
+
+# Octopress
+.deploy/
+.sass-cache/
+
+# Pelican
+output/
+develop_server.sh
+fabfile.py
+requirements.txt
+
+# Publii
+backups/
+
+# Sculpin
+sculpin.lock
+.output/
+
+# Sphinx
+_build/
+
+# Wintersmith
+.wintersmith/
+
+# WordPress
+wp-content/cache/
+*.sql
+
+# Drupal
+sites/default/files/
+*.sql
+
+# Magento
+var/
+generated/
+pub/static/
+app/etc/config.php
+app/etc/env.php
+
+# Laravel
+bootstrap/cache/
+storage/
+!.env.example
+
+# Symfony
+var/
+app/cache/
+app/logs/
+
+# Yii
+runtime/
+vendor/
+
+# Zend Framework
+data/cache/
+data/logs/
+
+# CakePHP
+logs/
+tmp/
+app/tmp/
+
+# CodeIgniter
+application/logs/
+application/cache/
+
+# FuelPHP
+fuel/app/cache/
+fuel/app/logs/
+
+# Lithium
+libraries/
+tmp/
+
+# Phalcon
+cache/
+compiled/
+
+# Slim
+logs/
+cache/
+
+# Silex
+cache/
+logs/
+
+# TYPO3
+typo3temp/
+uploads/
+
+# MODX
+core/cache/
+assets/cache/
+
+# Concrete5
+application/config/generated_overrides/
+application/files/
+packages/
+updates/
+
+# ExpressionEngine
+images/
+themes/user/
+
+# Craft CMS
+storage/
+vendor/
+
+# Statamic
+local/
+site/cookies/
+site/glide/
+
+# Grav
+backup/
+cache/
+images/
+tmp/
+
+# OctoberCMS
+storage/
+vendor/
+
+# SilverStripe
+.silverstripe/
+assets/
+
+# Umbraco
+media/
+umbraco/Data/
+umbraco/Logs/
+
+# Sitecore
+serialization/
+
+# Kentico
+CMSModules/
+CMSScripts/
+CMSInstallFiles/
+TempFileUploads/
+
+# Episerver
+modulesbin/
+
+# Sitefinity
+Bin/
+App_Data/
+
+# Orchard
+Modules/
+Themes/
+bin/
+obj/
+
+# DotNetNuke
+Portals/
+bin/
+obj/
+
+# mojoPortal
+Data/
+UserFiles/
+
+# PiranhaCMS
+App_Data/
+
+# Umbraco
+media/
+umbraco/Data/
+umbraco/Logs/
+
+# Vendr
+App_Data/vendr/
+
+# nopCommerce
+App_Data/
+bin/
+obj/
+
+# ServiceStack
+App_Data/
+
+# Orckestra
+Generated/
+Media/
+
+# SiteVision
+private/
+temp/
+
+# WordPress plugins/themes (common)
+*/wp-content/plugins/*
+*/wp-content/themes/*
+
+# Drupal modules/themes (common)
+*/sites/all/modules/*
+*/sites/all/themes/*
+
+# Magento modules (common)
+*/app/code/*
+*/vendor/*
+
+# Laravel packages (common)
+*/vendor/*
+
+# Symfony bundles (common)
+*/vendor/*
+
+# Composer/Packagist
+vendor/
+composer.lock
+
+# Bower
+bower_components/
+bower.json
+
+# npm
 package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.yarn-integrity
+.yarn-metadata.json
+node-pre-gyp/
+.npm/
+
+# Yarn
+.yarn/
 yarn.lock
+.yarnrc
+
+# Pnpm
+node_modules/.pnpm/
+
+# Ruby
+*.gem
+*.rbc
+.bundle/
+vendor/bundle/
+vendor/cache/
+vendor/gems/
+vendor/ruby/
+.ruby-version
+.ruby-gemset
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cover/
+.landscape.yaml
+.pyup.yml
+.pyre/
+.pytype/
+.ipynb_checkpoints/
+.python-version
+.python-history
+.python-environments
+.venv.bak/
+venv.bak/
+env.bak/
+ENV.bak/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
+.yarn-integrity
+.yarn-metadata.json
+node-pre-gyp/
+.npm/
+.nyc_output/
+.nycrc
+istanbul.yml
+.coverage/
+.nyc/
+.c8/
+.c8rc
+.html
+.js.map
+.ts.map
+.jsx.map
+.tsx.map
+.css.map
+.scss.map
+.sass.map
+.less.map
+.styl.map
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.prof
+vendor/
+bin/
+*.mod
+*.sum
+*.lock
+go.sum
+go.mod
+Gopkg.toml
+Gopkg.lock
+glide.yaml
+glide.lock
+vendor.json
+Godeps/Godeps.json
+Godeps/_workspace/
+nbproject/
+*.pb.go
+*.pb.gw.go
+*.pb.micro.go
+*.pb.validate.go
+*.pb.twirp.go
+*.pb.ec.go
+*.pb.fwd.go
+*.pb.gorm.go
+*.pb.http.go
+*.pb.mix.go
+*.pb.msg.go
+*.pb.orm.go
+*.pb.qs.go
+*.pb.rpc.go
+*.pb.tm.go
+*.pb.validator.go
+*.pb.wrapper.go
+*.pb.custom.go
+*.pb.ext.go
+*.pb.gen.go
+*.pb.go
+*.pb.gw.go
+*.pb.micro.go
+*.pb.validate.go
+*.pb.twirp.go
+*.pb.ec.go
+*.pb.fwd.go
+*.pb.gorm.go
+*.pb.http.go
+*.pb.mix.go
+*.pb.msg.go
+*.pb.orm.go
+*.pb.qs.go
+*.pb.rpc.go
+*.pb.tm.go
+*.pb.validator.go
+*.pb.wrapper.go
+*.pb.custom.go
+*.pb.ext.go
+*.pb.gen.go
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+target/
+!.mvn/wrapper/maven-wrapper.jar
+lib/
+*.so
+*.dll
+*.dylib
+*.obj
+*.o
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+._*
+.directory
+.CFUserTextEncoding
+.hg/
+.svn/
+.git/
+.gitignore
+README.md
+LICENSE
+CHANGELOG.md
+CONTRIBUTING.md
+AUTHORS
+COPYING
+NOTICE
+TODO
+BACKERS.md
+SPONSORS.md
+FUNDING.yml
+ISSUE_TEMPLATE.md
+PULL_REQUEST_TEMPLATE.md
+.gitattributes
+.editorconfig
+.eslintrc
+.jshintrc
+.jscsrc
+.coafile
+.codeclimate.yml
+.codacy.yml
+.codecov.yml
+.coveralls.yml
+.dependency-cruiser.js
+.eslintignore
+.firebaserc
+.graphqlconfig
+.hound.yml
+.htmlhintrc
+.jscs.json
+.lgtm.yml
+.markdownlint.json
+.ncurc.json
+.nycrc
+.package-lock.json
+.stylelintignore
+.stylelintrc
+.tslint.json
+.wercker.yml
+.yarnrc
+.yo-rc.json
+ava.config.js
+babel.config.js
+brunch-config.coffee
+brunch-config.js
+bsconfig.json
+chokidar.options
+commitlint.config.js
+cssnano.config.js
+dependency-cruiser.js
+electron-builder.config.js
+fuse.js
+gulp.config.js
+jest.config.js
+jsconfig.json
+karma.conf.js
+knexfile.js
+lighthouserc.js
+microbundle.config.js
+next.config.js
+nodemon.json
+nuxt.config.js
+postcss.config.js
+prettier.config.js
+protractor.conf.js
+remotedev.config.js
+rollup.config.js
+stryker.conf.js
+tailwind.config.js
+testem.json
+tsconfig.json
+tslint.json
+webpack.config.js
+webpack.config.vendor.js
+webpack.mix.js
+.yarn/
+.pnp.*
+.yarn-state.yml
+.pnp.js
+.pnp.cjs
+.yarn/__virtual__/
+.pnp.loader.mjs
+.yarn/sdks/
+.yarn/plugins/
+.yarn/releases/
+.yarn/cache/
+.yarn/build/
+.yarn/install/
+.yarn/unplug/
+.yarn/virtual/
+.yarn/patches/
+.yarn/nm/
+.yarn/berry/
+.yarn/classic/
+.yarn/zero-installs/
+.yarn/local/
+.yarn/global/
+.yarn/data/
+.yarn/downloads/
+.yarn/metadata/
+.yarn/status/
+.yarn/versions/
+.yarn/checksums/
+.yarn/registries/
+.yarn/tokens/
+.yarn/auth/
+.yarn/keys/
+.yarn/certs/
+.yarn/ssl/
+.yarn/ssh/
+.yarn/git/
+.yarn/hg/
+.yarn/svn/
+.yarn/bzr/
+.yarn/fossil/
+.yarn/darcs/
+.yarn/plastic/
+.yarn/accurev/
+.yarn/bazaar/
+.yarn/codeville/
+.yarn/gnu/
+.yarn/rcs/
+.yarn/scm/
+.yarn/versioncontrol/
+.yarn/tools/
+.yarn/scripts/
+.yarn/hooks/
+.yarn/workspaces/
+.yarn/pnpify/
+.yarn/virtual-builds/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn/virtual-yarn/
+.yarn/virtual-node-modules/
+.yarn/virtual-bin/
+.yarn/virtual-scripts/
+.yarn/virtual-config/
+.yarn/virtual-env/
+.yarn/virtual-files/
+.yarn/virtual-folders/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn/virtual-yarn/
+.yarn/virtual-node-modules/
+.yarn/virtual-bin/
+.yarn/virtual-scripts/
+.yarn/virtual-config/
+.yarn/virtual-env/
+.yarn/virtual-files/
+.yarn/virtual-folders/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn/virtual-yarn/
+.yarn/virtual-node-modules/
+.yarn/virtual-bin/
+.yarn/virtual-scripts/
+.yarn/virtual-config/
+.yarn/virtual-env/
+.yarn/virtual-files/
+.yarn/virtual-folders/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn/virtual-yarn/
+.yarn/virtual-node-modules/
+.yarn/virtual-bin/
+.yarn/virtual-scripts/
+.yarn/virtual-config/
+.yarn/virtual-env/
+.yarn/virtual-files/
+.yarn/virtual-folders/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn/virtual-yarn/
+.yarn/virtual-node-modules/
+.yarn/virtual-bin/
+.yarn/virtual-scripts/
+.yarn/virtual-config/
+.yarn/virtual-env/
+.yarn/virtual-files/
+.yarn/virtual-folders/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn/virtual-yarn/
+.yarn/virtual-node-modules/
+.yarn/virtual-bin/
+.yarn/virtual-scripts/
+.yarn/virtual-config/
+.yarn/virtual-env/
+.yarn/virtual-files/
+.yarn/virtual-folders/
+.yarn/virtual-links/
+.yarn/virtual-modules/
+.yarn/virtual-packages/
+.yarn/virtual-resolutions/
+.yarn/virtual-specs/
+.yarn/virtual-workspaces/
+.yarn......
