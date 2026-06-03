@@ -64,7 +64,9 @@ export const Input = ({
         )}
       </div>
       {error && <p className="text-xs text-destructive">{error}</p>}
-      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
+      {hint && !error && (
+        <p className="text-xs text-muted-foreground">{hint}</p>
+      )}
     </div>
   )
 }
@@ -107,7 +109,9 @@ export const Textarea = ({
         {...props}
       />
       {error && <p className="text-xs text-destructive">{error}</p>}
-      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
+      {hint && !error && (
+        <p className="text-xs text-muted-foreground">{hint}</p>
+      )}
     </div>
   )
 }
@@ -165,7 +169,9 @@ export const Select = ({
         ))}
       </select>
       {error && <p className="text-xs text-destructive">{error}</p>}
-      {hint && !error && <p className="text-xs text-muted-foreground">{hint}</p>}
+      {hint && !error && (
+        <p className="text-xs text-muted-foreground">{hint}</p>
+      )}
     </div>
   )
 }
@@ -175,7 +181,14 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string
 }
 
-export const Checkbox = ({ label, error, className, id, disabled, ...props }: CheckboxProps) => {
+export const Checkbox = ({
+  label,
+  error,
+  className,
+  id,
+  disabled,
+  ...props
+}: CheckboxProps) => {
   const checkboxId = id || label?.toLowerCase().replace(/\s+/g, '-')
 
   return (
@@ -268,7 +281,9 @@ export const Switch = ({
     <div className="flex items-center justify-between gap-4">
       <div className="flex-1 space-y-1">
         {label && <label className="text-sm font-medium">{label}</label>}
-        {description && <p className="text-xs text-muted-foreground">{description}</p>}
+        {description && (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        )}
       </div>
       <button
         type="button"

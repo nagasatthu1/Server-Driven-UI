@@ -1,4 +1,8 @@
-import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  AxiosError,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+} from 'axios'
 
 // Configuration from environment variables
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
@@ -7,7 +11,9 @@ const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || '10000', 10)
 // Backend adapter pattern - allows switching backend implementations
 export interface BackendAdapter {
   name: string
-  transformRequest?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig
+  transformRequest?: (
+    config: InternalAxiosRequestConfig
+  ) => InternalAxiosRequestConfig
   transformResponse?: (response: AxiosResponse) => AxiosResponse
   handleError?: (error: AxiosError) => Promise<never>
 }
@@ -87,7 +93,7 @@ api.interceptors.request.use(
     if (currentAdapter.transformRequest) {
       return currentAdapter.transformRequest(config)
     }
-    
+
     // Add auth token
     const token = localStorage.getItem('auth_token')
     if (token) {
@@ -112,7 +118,7 @@ api.interceptors.response.use(
     if (currentAdapter.handleError) {
       return currentAdapter.handleError(error)
     }
-    
+
     // Default error handling
     if (error.response?.status === 401) {
       // Handle unauthorized access

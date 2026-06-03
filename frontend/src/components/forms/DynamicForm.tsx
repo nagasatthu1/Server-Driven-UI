@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { FormConfig, SectionConfig } from '../../types/api';
-import { DynamicFieldRenderer } from './DynamicFieldRenderer';
+import React, { useState } from 'react'
+import { FormConfig, SectionConfig } from '../../types/api'
+import { DynamicFieldRenderer } from './DynamicFieldRenderer'
 
 interface DynamicFormProps {
-  config: FormConfig;
-  formData: Record<string, any>;
-  errors: Record<string, string>;
-  onChange: (name: string, value: any) => void;
-  onSubmit: (e?: React.FormEvent) => Promise<any>;
-  submitting?: boolean;
+  config: FormConfig
+  formData: Record<string, any>
+  errors: Record<string, string>
+  onChange: (name: string, value: any) => void
+  onSubmit: (e?: React.FormEvent) => Promise<any>
+  submitting?: boolean
 }
 
 export const DynamicForm: React.FC<DynamicFormProps> = ({
@@ -19,17 +19,19 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   onSubmit,
   submitting = false,
 }) => {
-  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+  const [collapsedSections, setCollapsedSections] = useState<
+    Record<string, boolean>
+  >({})
 
   const toggleSection = (sectionIndex: number) => {
-    setCollapsedSections(prev => ({
+    setCollapsedSections((prev) => ({
       ...prev,
       [sectionIndex]: !prev[sectionIndex],
-    }));
-  };
+    }))
+  }
 
   const getGridCols = (colspan?: number) => {
-    if (!colspan) return '';
+    if (!colspan) return ''
     const map: Record<number, string> = {
       1: 'col-span-1',
       2: 'col-span-2',
@@ -37,12 +39,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
       4: 'col-span-4',
       6: 'col-span-6',
       12: 'col-span-12',
-    };
-    return map[colspan] || 'col-span-1';
-  };
+    }
+    return map[colspan] || 'col-span-1'
+  }
 
   const renderSection = (section: SectionConfig, sectionIndex: number) => {
-    const isCollapsed = collapsedSections[sectionIndex] ?? section.defaultCollapsed ?? false;
+    const isCollapsed =
+      collapsedSections[sectionIndex] ?? section.defaultCollapsed ?? false
 
     return (
       <div
@@ -64,9 +67,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
             <div className="flex items-center gap-3">
               {section.icon && <span className="text-xl">{section.icon}</span>}
               <div className="text-left">
-                <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {section.title}
+                </h2>
                 {section.description && (
-                  <p className="text-sm text-gray-500 mt-0.5">{section.description}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    {section.description}
+                  </p>
                 )}
               </div>
             </div>
@@ -76,17 +83,28 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </button>
         ) : (
-          <div className={`px-6 py-4 bg-gray-50 border-b border-gray-200 ${section.style?.headerClassName || ''}`}>
+          <div
+            className={`px-6 py-4 bg-gray-50 border-b border-gray-200 ${section.style?.headerClassName || ''}`}
+          >
             <div className="flex items-center gap-3">
               {section.icon && <span className="text-xl">{section.icon}</span>}
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {section.title}
+                </h2>
                 {section.description && (
-                  <p className="text-sm text-gray-500 mt-0.5">{section.description}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    {section.description}
+                  </p>
                 )}
               </div>
             </div>
@@ -96,39 +114,44 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
         {/* Section Content */}
         {!isCollapsed && (
           <div className="p-6">
-            <div className={`grid gap-6 ${config.columns ? `grid-cols-${config.columns}` : 'grid-cols-1'} ${config.layout === 'horizontal' ? 'md:grid-cols-2' : ''}`}>
+            <div
+              className={`grid gap-6 ${config.columns ? `grid-cols-${config.columns}` : 'grid-cols-1'} ${config.layout === 'horizontal' ? 'md:grid-cols-2' : ''}`}
+            >
               {section.fields.map((field, fieldIndex) => {
                 // Skip hidden fields based on conditional logic
                 if (field.conditional) {
-                  const conditionField = formData[field.conditional.field];
-                  const { operator, value } = field.conditional;
-                  
-                  let isVisible = true;
+                  const conditionField = formData[field.conditional.field]
+                  const { operator, value } = field.conditional
+
+                  let isVisible = true
                   switch (operator) {
                     case 'equals':
-                      isVisible = conditionField === value;
-                      break;
+                      isVisible = conditionField === value
+                      break
                     case 'notEquals':
-                      isVisible = conditionField !== value;
-                      break;
+                      isVisible = conditionField !== value
+                      break
                     case 'contains':
-                      isVisible = Array.isArray(conditionField) 
-                        ? conditionField.includes(value) 
-                        : conditionField?.includes(value);
-                      break;
+                      isVisible = Array.isArray(conditionField)
+                        ? conditionField.includes(value)
+                        : conditionField?.includes(value)
+                      break
                     case 'greaterThan':
-                      isVisible = Number(conditionField) > Number(value);
-                      break;
+                      isVisible = Number(conditionField) > Number(value)
+                      break
                     case 'lessThan':
-                      isVisible = Number(conditionField) < Number(value);
-                      break;
+                      isVisible = Number(conditionField) < Number(value)
+                      break
                   }
-                  
-                  if (!isVisible) return null;
+
+                  if (!isVisible) return null
                 }
 
                 return (
-                  <div key={fieldIndex} className={getGridCols(field.grid?.colspan)}>
+                  <div
+                    key={fieldIndex}
+                    className={getGridCols(field.grid?.colspan)}
+                  >
                     <DynamicFieldRenderer
                       field={field}
                       value={formData[field.name]}
@@ -136,14 +159,14 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
                       onChange={onChange}
                     />
                   </div>
-                );
+                )
               })}
             </div>
           </div>
         )}
       </div>
-    );
-  };
+    )
+  }
 
   const getButtonVariant = (variant?: string) => {
     const variants: Record<string, string> = {
@@ -151,15 +174,20 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
       secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
       success: 'bg-green-600 hover:bg-green-700 text-white',
       danger: 'bg-red-600 hover:bg-red-700 text-white',
-    };
-    return variants[variant || 'primary'] || variants.primary;
-  };
+    }
+    return variants[variant || 'primary'] || variants.primary
+  }
 
   return (
-    <form onSubmit={onSubmit} className={`max-w-6xl mx-auto ${config.style?.className || ''}`}>
+    <form
+      onSubmit={onSubmit}
+      className={`max-w-6xl mx-auto ${config.style?.className || ''}`}
+    >
       {/* Form Header */}
       {(config.title || config.description) && (
-        <div className={`mb-8 pb-6 border-b border-gray-200 ${config.style?.headerClassName || ''}`}>
+        <div
+          className={`mb-8 pb-6 border-b border-gray-200 ${config.style?.headerClassName || ''}`}
+        >
           {config.title && (
             <h1 className="text-2xl font-bold text-gray-900">{config.title}</h1>
           )}
@@ -187,20 +215,35 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
             `}
           >
             {submitting && (
-              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              <svg
+                className="animate-spin h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
               </svg>
             )}
-            {submitting && config.submitButton.loadingText 
-              ? config.submitButton.loadingText 
+            {submitting && config.submitButton.loadingText
+              ? config.submitButton.loadingText
               : config.submitButton.text}
             {config.submitButton.icon && !submitting && (
               <span>{config.submitButton.icon}</span>
             )}
           </button>
         )}
-        
+
         {config.cancelButton?.show && (
           <button
             type="button"
@@ -212,5 +255,5 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
         )}
       </div>
     </form>
-  );
-};
+  )
+}

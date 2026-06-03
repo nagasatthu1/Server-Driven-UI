@@ -11,7 +11,7 @@ export default function AdminLayout() {
 
   useEffect(() => {
     setIsClient(true)
-    
+
     // Load saved layout from localStorage on mount
     const savedLayout = localStorage.getItem('page-layout')
     if (savedLayout && !layoutConfig) {
@@ -63,9 +63,15 @@ export default function AdminLayout() {
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-bold">Admin Panel</h1>
             <nav className="flex items-center gap-4 text-sm">
-              <a href="/admin/pages" className="hover:text-primary">Pages</a>
-              <a href="/admin/widgets" className="hover:text-primary">Widgets</a>
-              <a href="/admin/settings" className="hover:text-primary">Settings</a>
+              <a href="/admin/pages" className="hover:text-primary">
+                Pages
+              </a>
+              <a href="/admin/widgets" className="hover:text-primary">
+                Widgets
+              </a>
+              <a href="/admin/settings" className="hover:text-primary">
+                Settings
+              </a>
             </nav>
           </div>
           <div className="flex items-center gap-4">

@@ -7,7 +7,10 @@ interface DynamicLayoutProps {
   children: ReactNode
 }
 
-export default function DynamicLayout({ config, children }: DynamicLayoutProps) {
+export default function DynamicLayout({
+  config,
+  children,
+}: DynamicLayoutProps) {
   const { theme, branding, navigation } = config
 
   return (
@@ -17,7 +20,11 @@ export default function DynamicLayout({ config, children }: DynamicLayoutProps) 
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             {branding.logoUrl && (
-              <img src={branding.logoUrl} alt={branding.appName} className="h-8 w-auto" />
+              <img
+                src={branding.logoUrl}
+                alt={branding.appName}
+                className="h-8 w-auto"
+              />
             )}
             <span className="text-xl font-bold">{branding.appName}</span>
           </div>

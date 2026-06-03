@@ -1,18 +1,25 @@
 import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
 import { Modal } from '@/components/ui/Modal'
-import { Input, Textarea, Select, Checkbox, Switch, RadioGroup } from '@/components/ui/Input'
+import {
+  Input,
+  Textarea,
+  Select,
+  Checkbox,
+  Switch,
+  RadioGroup,
+} from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  Calendar, 
-  Lock, 
-  Search, 
+import {
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  Lock,
+  Search,
   CreditCard,
   Globe,
-  FileText
+  FileText,
 } from 'lucide-react'
 
 export default function ExamplesPage() {
@@ -67,7 +74,11 @@ export default function ExamplesPage() {
               <h1 className="text-2xl font-bold">Ví dụ Components</h1>
             </div>
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm" onClick={() => setModalOpen(true)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setModalOpen(true)}
+              >
                 Mở Popup
               </Button>
               <Button size="sm">Action Button</Button>
@@ -81,7 +92,9 @@ export default function ExamplesPage() {
           <section className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold mb-2">Nhập liệu cơ bản</h2>
-              <p className="text-muted-foreground">Các thành phần nhập liệu thông dụng</p>
+              <p className="text-muted-foreground">
+                Các thành phần nhập liệu thông dụng
+              </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -128,7 +141,9 @@ export default function ExamplesPage() {
                   placeholder="ABC123"
                   hint="Kiểm tra email của bạn"
                   rightElement={
-                    <Button variant="ghost" size="sm">Gửi lại</Button>
+                    <Button variant="ghost" size="sm">
+                      Gửi lại
+                    </Button>
                   }
                 />
               </div>
@@ -174,10 +189,7 @@ export default function ExamplesPage() {
               {/* Search & Special Inputs */}
               <div className="space-y-4 p-6 rounded-lg border bg-card">
                 <h3 className="font-medium">Tìm kiếm & Đặc biệt</h3>
-                <Input
-                  placeholder="Tìm kiếm..."
-                  icon={<Search size={18} />}
-                />
+                <Input placeholder="Tìm kiếm..." icon={<Search size={18} />} />
                 <Input
                   label="Số thẻ tín dụng"
                   placeholder="0000 0000 0000 0000"
@@ -188,7 +200,11 @@ export default function ExamplesPage() {
                   label="Tìm kiếm tài liệu"
                   placeholder="Nhập từ khóa..."
                   leftElement={<FileText size={18} />}
-                  rightElement={<Button variant="ghost" size="icon"><Search size={16} /></Button>}
+                  rightElement={
+                    <Button variant="ghost" size="icon">
+                      <Search size={16} />
+                    </Button>
+                  }
                 />
               </div>
             </div>
@@ -197,7 +213,9 @@ export default function ExamplesPage() {
           {/* Checkbox, Radio, Switch Section */}
           <section className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold mb-2">Checkbox, Radio & Switch</h2>
+              <h2 className="text-xl font-semibold mb-2">
+                Checkbox, Radio & Switch
+              </h2>
               <p className="text-muted-foreground">Các thành phần lựa chọn</p>
             </div>
 
@@ -219,7 +237,9 @@ export default function ExamplesPage() {
                   label="Chủ đề"
                   options={themeOptions}
                   value={formData.theme}
-                  onChange={(value) => setFormData({ ...formData, theme: value })}
+                  onChange={(value) =>
+                    setFormData({ ...formData, theme: value })
+                  }
                 />
               </div>
 
@@ -230,13 +250,17 @@ export default function ExamplesPage() {
                   label="Thông báo"
                   description="Bật thông báo push"
                   checked={formData.notifications}
-                  onCheckedChange={(checked) => setFormData({ ...formData, notifications: checked })}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, notifications: checked })
+                  }
                 />
                 <Switch
                   label="Newsletter"
                   description="Nhận tin tức hàng tuần"
                   checked={formData.newsletter}
-                  onCheckedChange={(checked) => setFormData({ ...formData, newsletter: checked })}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, newsletter: checked })
+                  }
                 />
                 <Switch
                   label="Disabled"
@@ -301,12 +325,16 @@ export default function ExamplesPage() {
               <div className="rounded-lg border bg-card text-card-foreground shadow-soft">
                 <div className="p-6">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-muted-foreground">Tổng người dùng</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Tổng người dùng
+                    </p>
                     <User className="h-4 w-4 text-muted-foreground" />
                   </div>
                   <div className="mt-2">
                     <p className="text-3xl font-bold">1,234</p>
-                    <p className="text-xs text-success mt-1">+12.5% so với tháng trước</p>
+                    <p className="text-xs text-success mt-1">
+                      +12.5% so với tháng trước
+                    </p>
                   </div>
                 </div>
               </div>
@@ -318,10 +346,14 @@ export default function ExamplesPage() {
                     AD
                   </div>
                   <h3 className="mt-4 font-semibold text-lg">Admin User</h3>
-                  <p className="text-sm text-muted-foreground">admin@example.com</p>
+                  <p className="text-sm text-muted-foreground">
+                    admin@example.com
+                  </p>
                   <div className="mt-4 flex gap-2 justify-center">
                     <Button size="sm">Xem profile</Button>
-                    <Button size="sm" variant="outline">Nhắn tin</Button>
+                    <Button size="sm" variant="outline">
+                      Nhắn tin
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -342,18 +374,16 @@ export default function ExamplesPage() {
             <Button variant="outline" onClick={() => setModalOpen(false)}>
               Hủy
             </Button>
-            <Button onClick={() => setModalOpen(false)}>
-              Xác nhận
-            </Button>
+            <Button onClick={() => setModalOpen(false)}>Xác nhận</Button>
           </>
         }
       >
         <div className="space-y-4">
-          <p>Đây là nội dung của popup. Bạn có thể đặt bất kỳ component nào ở đây.</p>
-          <Input
-            label="Nhập thông tin bổ sung"
-            placeholder="..."
-          />
+          <p>
+            Đây là nội dung của popup. Bạn có thể đặt bất kỳ component nào ở
+            đây.
+          </p>
+          <Input label="Nhập thông tin bổ sung" placeholder="..." />
         </div>
       </Modal>
     </div>
